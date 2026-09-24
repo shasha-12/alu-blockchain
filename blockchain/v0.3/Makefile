@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -pedantic -std=gnu90 -ggdb3 -c -I. -Itransaction/ -Iprovided/ -I../../crypto -L../../crypto -lhblk_crypto -lllist -lssl -lcrypto -pthread
 
-SRC0 = $(wildcard *.c) $(wildcard transaction/*.c) $(wildcard provided/*.c)
+SRC0 = $(wildcard *.c) $(wildcard transaction/*.c)
 OBJ0 = $(SRC0:.c=.o)
 NAME0 = libhblk_blockchain.a
 

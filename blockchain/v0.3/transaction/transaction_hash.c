@@ -21,7 +21,8 @@ uint8_t *transaction_hash(transaction_t const *transaction,
 	if (!transaction)
 		return (NULL);
 
-	len = SHA256_DIGEST_LENGTH * 3 * llist_size(transaction->inputs) + SHA256_DIGEST_LENGTH * llist_size(transaction->outputs);
+	len = SHA256_DIGEST_LENGTH * 3 * llist_size(transaction->inputs) +
+	      SHA256_DIGEST_LENGTH * llist_size(transaction->outputs);
 	_buf = buf = calloc(1, len);
 	if (!_buf)
 		return (NULL);
@@ -30,8 +31,6 @@ uint8_t *transaction_hash(transaction_t const *transaction,
 	if (!sha256((const int8_t *)_buf, len, hash_buf))
 		hash_buf = NULL;
 	free(_buf);
-	return (hash_buf);
-
 	return (hash_buf);
 }
 
@@ -59,7 +58,8 @@ int hash_inputs(llist_node_t node, unsigned int idx, void *arg)
  */
 int hash_outputs(llist_node_t node, unsigned int idx, void *arg)
 {
-	memcpy(*(uint8_t **)arg, ((tx_out_t *)node)->hash, SHA256_DIGEST_LENGTH);
+	memcpy(*(uint8_t **)arg, ((tx_out_t *)node)->hash,
+	       SHA256_DIGEST_LENGTH);
 	*(uint8_t **)arg += SHA256_DIGEST_LENGTH;
 	return (0);
 	(void)idx;
