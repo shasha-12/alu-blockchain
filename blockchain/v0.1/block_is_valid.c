@@ -1,7 +1,7 @@
 #include "blockchain.h"
 
 /* GENESIS_BLOCK - first block in the blockchain */
-#define GENESIS_BLOCK                                                          \
+#define GENESIS_BLOCK                                                         \
 	{                                                                      \
 	    {                                                                  \
 		0 /* index */,                                                 \
@@ -37,7 +37,8 @@ int block_is_valid(block_t const *block, block_t const *prev_block)
 	if (!block_hash(prev_block, hash_buf) ||
 	    memcmp(hash_buf, prev_block->hash, SHA256_DIGEST_LENGTH))
 		return (1);
-	if (memcmp(prev_block->hash, block->info.prev_hash, SHA256_DIGEST_LENGTH))
+	if (memcmp(prev_block->hash, block->info.prev_hash,
+		   SHA256_DIGEST_LENGTH))
 		return (1);
 	if (!block_hash(block, hash_buf) ||
 	    memcmp(hash_buf, block->hash, SHA256_DIGEST_LENGTH))
