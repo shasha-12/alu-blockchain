@@ -2,22 +2,23 @@
 #include "../provided/provided.h"
 
 /**
- * find_unspent - finds unspent matching txo
- * @node: current node, unspent_txo_t
- * @arg: txo id
- * Return: 0 if continue else 1
+ * find_unspent - finds the unspent output referred to by an input
+ * @node: current node, unspent_tx_out_t
+ * @arg: tx_in_t referring to the unspent output
+ * Return: 1 if the node matches, 0 otherwise
  */
 int find_unspent(llist_node_t node, void *arg)
 {
 	unspent_tx_out_t *utxo = node;
+	tx_in_t *txi = arg;
 
-	if (!memcmp(arg, utxo->out.hash, SHA256_DIGEST_LENGTH))
-		return (1);
-	return (0);
+	return (!memcmp(txi->block_hash, utxo->block_hash, SHA256_DIGEST_LENGTH) &&
+		!memcmp(txi->tx_id, utxo->tx_id, SHA256_DIGEST_LENGTH) &&
+		!memcmp(txi->tx_out_hash, utxo->out.hash, SHA256_DIGEST_LENGTH));
 }
 
 /**
- * foreach_input - maps output to input txs
+ * foreach_input - removes the output spent by an input from the unspent list
  * @node: current node, txi
  * @idx: index of node
  * @_args: arguments
@@ -26,13 +27,13 @@ int find_unspent(llist_node_t node, void *arg)
 int foreach_input(llist_node_t node, unsigned int idx, void *_args)
 {
 	void **args = _args;
-	tx_in_t *txi = node;
+	unspent_tx_out_t *utxo = llist_find_node(args[0], find_unspent, node);
 
-	llist_remove_node(args[0], find_unspent, txi->tx_out_hash, 1, free);
+	/* Unlink then free, the node is not always freed by llist_remove_node */
+	if (utxo && !llist_remove_node(args[0], find_unspent, node, 0, NULL))
+		free(utxo);
 	return (0);
 	(void)idx;
-	(void)txi;
-	(void)args;
 }
 
 /**
