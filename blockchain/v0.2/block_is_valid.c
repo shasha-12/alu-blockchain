@@ -1,21 +1,11 @@
 #include "blockchain.h"
 
-/* GENESIS_BLOCK - first block in the blockchain */
-#define GENESIS_BLOCK                                                                  \
-	{                                                                              \
-		{                                                                      \
-		    0 /* index */,                                                     \
-		    0,		/* difficulty */                                       \
-		    1537578000, /* timestamp */                                        \
-		    0,		/* nonce */                                            \
-		    {0}		/* prev_hash */                                        \
-		},                                                                     \
-		    {                                                                  \
-			"Holberton School", /* buffer */                               \
-			16		    /* len */                                  \
-		    },			    /* hashed data */                          \
-		    "\xc5\x2c\x26\xc8\xb5\x46\x16\x39\x63\x5d\x8e\xdf\x2a\x97\xd4\x8d" \
-		    "\x0c\x8e\x00\x09\xc8\x17\xf2\xb1\xd3\xd7\xff\x2f\x04\x51\x58\x03"
+/* GENESIS_BLOCK - info, data and hash of the first block */
+#define GENESIS_BLOCK { \
+	{ 0, 0, 1537578000, 0, {0} }, \
+	{ "Holberton School", 16 }, \
+	"\xc5\x2c\x26\xc8\xb5\x46\x16\x39\x63\x5d\x8e\xdf\x2a\x97\xd4\x8d" \
+	"\x0c\x8e\x00\x09\xc8\x17\xf2\xb1\xd3\xd7\xff\x2f\x04\x51\x58\x03" \
 }
 
 /**
@@ -38,7 +28,8 @@ int block_is_valid(block_t const *block, block_t const *prev_block)
 	if (!block_hash(prev_block, hash_buf) ||
 	    memcmp(hash_buf, prev_block->hash, SHA256_DIGEST_LENGTH))
 		return (1);
-	if (memcmp(prev_block->hash, block->info.prev_hash, SHA256_DIGEST_LENGTH))
+	if (memcmp(prev_block->hash, block->info.prev_hash,
+		   SHA256_DIGEST_LENGTH))
 		return (1);
 	if (!block_hash(block, hash_buf) ||
 	    memcmp(hash_buf, block->hash, SHA256_DIGEST_LENGTH))
