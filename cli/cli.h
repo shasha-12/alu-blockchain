@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "blockchain.h"
 
@@ -11,6 +12,7 @@
 #define CLI_MAX_ARGS 4
 #define CLI_MAX_PATH 200
 #define CLI_BLOCK_DATA "Holberton School"
+#define CLI_SHORT_LEN 8
 
 /**
  * struct state_s - Global state of the CLI
@@ -71,5 +73,23 @@ int parse_pub(char const *s, uint8_t pub[EC_PUB_LEN]);
 int same_output(tx_in_t const *in, unspent_tx_out_t const *utxo);
 int utxo_in_pool(llist_t *tx_pool, unspent_tx_out_t const *utxo);
 int inputs_conflict(llist_t *transactions, transaction_t const *tx);
+
+/* display.c */
+void print_short(uint8_t const *buf, size_t len);
+int tx_is_coinbase(transaction_t const *tx);
+tx_out_t *find_output(blockchain_t *blockchain, tx_in_t const *in);
+void print_output(tx_out_t const *out, uint8_t const *me);
+void print_tx(blockchain_t *blockchain, transaction_t const *tx,
+	      uint8_t const *me);
+
+/* explorer.c */
+int cmd_chain(state_t *state, char **argv);
+int cmd_block(state_t *state, char **argv);
+int cmd_tx(state_t *state, char **argv);
+
+/* account.c */
+int cmd_address(state_t *state, char **argv);
+int cmd_balance(state_t *state, char **argv);
+int cmd_history(state_t *state, char **argv);
 
 #endif /* CLI_H */

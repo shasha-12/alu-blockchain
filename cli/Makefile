@@ -8,7 +8,8 @@ LDLIBS = -lhblk_blockchain -lhblk_crypto -lllist -lssl -lcrypto -pthread
 # _endianness.c is provided with the Blockchain sources, not in the library
 vpath _endianness.c ../blockchain/v0.3/provided
 
-SRC = cli.c wallet.c send.c mine.c info.c storage.c utils.c _endianness.c
+SRC = cli.c wallet.c send.c mine.c info.c storage.c utils.c \
+      display.c explorer.c account.c _endianness.c
 OBJ = $(SRC:.c=.o)
 NAME = cli
 
